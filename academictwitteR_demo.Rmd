@@ -1,0 +1,85 @@
+---
+title: "academictwitteR"
+author: "Bin Chen"
+date: "2/13/2022"
+output: html_document
+---
+
+```{r}
+library(academictwitteR)
+```
+
+# Set up environment
+
+```{r}
+#set_bearer() # run this line, input  "TWITTER_BEARER = 'your bearer token'", restart R, run from the start 
+
+#get_bearer() # run get_bearer every time to check whether your environment is correctly set up;
+```
+
+# Collect Tweets
+
+## get_all_tweets
+
+```{r}
+tweets <-
+  get_all_tweets(
+    query = "#Beijing2022", # use build_query() for advanced search
+    start_tweets = "2022-01-12T00:00:00Z", 
+    end_tweets = "2022-01-13T00:00:00Z",
+    data_path = "twitter_data/", # Recommended to specify a data path in order to mitigate data loss when ingesting large amounts of data
+    bind_tweets = FALSE, # bind the JSONs manually later
+    n= 50
+  )
+```
+
+```{r eval=FALSE}
+build_query(
+  query = NULL,
+  exact_phrase = NULL,
+  users = NULL,
+  reply_to = NULL,
+  retweets_of = NULL,
+  exclude = NULL,
+  is_retweet = NULL,
+  is_reply = NULL,
+  is_quote = NULL,
+  is_verified = NULL,
+  remove_promoted = FALSE,
+  has_hashtags = NULL,
+  has_cashtags = NULL,
+  has_links = NULL,
+  has_mentions = NULL,
+  has_media = NULL,
+  has_images = NULL,
+  has_videos = NULL,
+  has_geo = NULL,
+  place = NULL,
+  country = NULL,
+  point_radius = NULL,
+  bbox = NULL,
+  lang = NULL,
+  conversation_id = NULL,
+  url = NULL
+)
+```
+
+## Bind output files
+
+```{r}
+# bind json files in the directory "twitter_data" into a "tidy" data frame / tibble
+# This will bind users + tweets data
+tweets_bind <- bind_tweets(data_path = "twitter_data/", output_format = "tidy")
+str(tweets_bind)
+```
+
+
+# Count tweets for "big data"
+
+```{r}
+count_all_tweets(
+  query = "#Beijing2022",
+  start_tweets = "2022-01-12T00:00:00Z", 
+  end_tweets = "2022-01-13T00:00:00Z")
+```
+
